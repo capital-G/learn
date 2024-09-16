@@ -1,0 +1,403 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>SuperCollider Architecture - A SuperCollider Programming Tutorial</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="supercollider-architecture.html" class="active"><strong aria-hidden="true">2.</strong> SuperCollider Architecture</a></li><li class="chapter-item expanded "><a href="sclang-quick-reference.html"><strong aria-hidden="true">3.</strong> sclang quick reference</a></li><li class="chapter-item expanded "><a href="composing-in-supercollider.html"><strong aria-hidden="true">4.</strong> Composing in SuperCollider</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">A SuperCollider Programming Tutorial</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="supercollider-architecture"><a class="header" href="#supercollider-architecture">SuperCollider architecture</a></h1>
+<p>SuperCollider is first and foremost an audio programming language, but there's
+a lot more to it than just a textual interface. More specifically,
+SuperCollider consists of a audio server architected to support for on-the-fly
+definition and reuse of DSP algorithms. Uniquely, the audio is separated from a
+client, which provides the actual sequencing and control.</p>
+<p>The best way to summarize how SC differs from its peers is that it's not a toy.
+It's robust, efficient, and meant to gracefully handle a wide range of sound
+synthesis models, no matter how extreme. Design decisions in SC have been made
+with these goals in mind. It's not necessarily perfect software, but if didn't
+do its job pretty dang well, I wouldn't be here writing this tutorial.</p>
+<p>In this chapter, we'll discuss specific details of server-client separation and
+how the server works, and explain why they are important. We won't get very
+deep into the implementation of SC — just the architecture that you, the user,
+have to work with and understand to fully harness the power of the platform.</p>
+<h2 id="real-time-audio-constraints"><a class="header" href="#real-time-audio-constraints">Real-time audio constraints</a></h2>
+<p>Real-time audio software is under tight time constraints. If a single buffer of
+samples takes too long to compute, a horrible glitch is audible. When you're
+performing a live work in front of hundreds of people, you generally do not
+want your audio to glitch.</p>
+<p>Efficiency is a huge concern for audio software that advertises itself as
+suitable for real time performance. This is true today, and it was especially
+true for computers in 1996. For a lot of software, performance is convenience.
+For real-time audio, performance is reliability.</p>
+<p>The little CPU meter that you see on many audio programs, SuperCollider
+included, is an indicator of how fast DSP is happening. If CPU usage is low and
+stable, you can probably rest easy knowing that the program won't glitch out.
+If it's seriously fluctuating, you are in trouble.</p>
+<p>SuperCollider's server not only needs to be efficient, but it needs to be
+flexible. You have to be able to send it arbitrary sound synthesis networks on
+the fly, and it has to compile and run those algorithms under real-time
+constraints.</p>
+<h2 id="server-client-separation"><a class="header" href="#server-client-separation">Server-client separation</a></h2>
+<p>In SuperCollider 1 and 2, there was no server-client separation. The language
+connected directly to audio driver callbacks, and <em>every</em> operation in the
+SuperCollider environment was in the audio thread, where everything must arrive
+exactly on time.</p>
+<p>This means that not only did UGens have to race against the clock to prevent
+glitches, but so did an entire interpreted programming language. Even with a
+cleverly written language that had real-time safe garbage collection, there are
+some operations that simply cannot be done safely with this scheme — loading a
+large sound file from disk would usually cause some kind of glitch, so it would
+have to be done before a composition starts.</p>
+<p>Modern audio software usually runs separate threads for audio and other non-DSP
+(such as graphics). However, back in the 90's, threads were not as powerful and
+as widespread on consumer machines.</p>
+<p>In SuperCollider 3, the decision was made to split the language and server into
+two separate processes. Not only does this allow unsafe operations to be
+relegated to one process, but this also keeps a nice separation of concerns
+between audio processing and control, allowing for all manner of alternate
+clients, alternate servers, multiple clients, multiple servers, and servers
+running on a different machine.</p>
+<h2 id="the-servers"><a class="header" href="#the-servers">The servers</a></h2>
+<p>The SuperCollider server programs are <em>scsynth</em> and <em>supernova</em>. They both do
+roughly the same thing. supernova is a newer, ground-up rewrite of scsynth that
+adds support for efficient parallel processing on multi-core CPUs, which we'll
+discuss later in this chapter.</p>
+<p>Both are actively maintained, but supernova is more experimental and buggy due
+to its younger age. Furthermore, supernova is not supported on Windows yet, and
+was not packaged with the macOS binary build until version 3.10. If you're a
+new SC user, scsynth is recommended.</p>
+<p>Since scsynth and supernova implement much of the same functionality, I will
+use "scsynth" as a shorthand for "scsynth or supernova" throughout these
+tutorials.</p>
+<h2 id="a-quick-osc-primer"><a class="header" href="#a-quick-osc-primer">A quick OSC primer</a></h2>
+<p>The client talks to scsynth and vice versa using Open Sound Control (OSC).
+Despite the name, OSC is not very audio-specific at all — it's a lightweight
+binary message protocol that lets you send over arrays of common data types.
+OSC is usually sent over TCP or UDP.</p>
+<p>An OSC message starts with an address, indicated with a forward slash. This is
+interpreted as the name of a "command" that the receiver understands. It is
+then followed by a heterogeneous array containing any mixture of strings,
+floats, integers, binary data, and timestamps.</p>
+<p>For example, <code>/s_new</code> is a command that causes scsynth to create a new Synth
+node — analogous to a MIDI note on. In sclang, you can send a message to
+scsynth using the <code>NetAddr:sendMsg</code> instance method:</p>
+<pre><code>Server.default.addr.sendMsg(['/s_new', "piano", -1, 0, "velocity", 0.5]);
+</code></pre>
+<p>This OSC message tells scsynth to create a new Synth from the <code>piano</code> SynthDef,
+setting <code>velocity</code> to 0.5. It is roughly equivalent to</p>
+<pre><code>Synth(\piano, [velocity: 0.5])
+</code></pre>
+<p>There are a few more details like OSC bundles, but we won't go into them yet.
+Check the <a href="http://opensoundcontrol.org/">Open Sound Control</a> official website,
+which clearly explains the protocol as well as its binary representation.</p>
+<h2 id="the-signal-processing-hierarchy-of-scsynth"><a class="header" href="#the-signal-processing-hierarchy-of-scsynth">The signal processing hierarchy of scsynth</a></h2>
+<p>A simple real-time modular audio application might have the ability to create
+and destroy some pre-fab audio processing nodes on the fly, and functionality
+to modulate and rewire them.</p>
+<p>It seems nice. Unfortunately, a naive implementation of this formula really
+starts to buckle when put under real-world conditions. Musicians want polyphony
+— spawning the same synthesis algorithms over and over again from a template
+like on a keyboard synthesizer. The ability to efficiently define and reuse DSP
+algorithms is a rarely mentioned, but very important area where SC really
+shines.</p>
+<p>In this section, we'll look at scsynth's unique hierarchical approach to
+scaffolding of modular audio processing.</p>
+<h3 id="layer-1-signals-and-block-based-processing"><a class="header" href="#layer-1-signals-and-block-based-processing">Layer 1: Signals and block-based processing</a></h3>
+<p>Currently, all signals in the server are 32-bit floating-points.</p>
+<p>Very importantly, audio signals are processed in blocks, not individual
+samples. The size of the block is determined by a command-line option to
+scsynth. By default, sclang sets a block size of 64. By processing audio in
+blocks, DSP code can take advantage of vectorization and caching to help speed
+up computation. However, there is a disadvantage that single-sample feedback
+is intractable without making your own UGen in C++. (There <em>is</em> a hack to get
+around this using demand-rate UGens, but I won't discuss it here.)</p>
+<p>As you might know from the beginner tutorial, SC signals aren't just audio —
+some are control-rate signals, conventionally denoted <code>.kr</code> in UGen classes.
+These signals define only one sample per block. Performing arithmetic
+operations on such signals is significantly faster since there's simply less
+signal to deal with. In DSP parlance, control rate signals are "downsampled
+processing."</p>
+<p>Block-based sample processing is fairly common in well-written audio software,
+but marking some signals as audio and others as control is a somewhat SC-unique
+deal.</p>
+<h3 id="layer-2-ugens-and-units"><a class="header" href="#layer-2-ugens-and-units">Layer 2: UGens and Units</a></h3>
+<p>A UGen (unit generator) is a chunk of DSP code, such as an oscillator or filter.
+When instantiated, it creates a <em>unit</em>, which is an object that processes input
+signals and produces output signals.</p>
+<p>In compiled form, UGens physically live in <em>plugins</em>, which are shared
+libraries (<code>.scx</code> files on Windows and macOS, <code>.so</code> files on Linux). When
+scsynth boots up, it searches for plugin files and loads them. The connective
+tissue between scsynth and plugins is known as the <em>plugin interface</em>, a binary
+interface written in C.</p>
+<h3 id="layer-3-synthdefs-and-synths"><a class="header" href="#layer-3-synthdefs-and-synths">Layer 3: SynthDefs and Synths</a></h3>
+<p>A SynthDef is a blueprint describing how UGens are connected together. When
+instantiated, the resulting object is a connection of UGens known as a Synth.
+Despite the name, a Synth is nowhere close to the physical synthesizer object.
+It's a generic, miniature DSP program that can do pretty much anything from
+producing sound to processing sound to analyzing it: whatever is possible with
+a combination of UGens.</p>
+<p>The client can't directly manipulate UGens or units — it has to first create a
+SynthDef using <code>/d_recv</code> (<code>SynthDef:add</code>) or related commands, then instantiate
+that SynthDef as a Synth using <code>/s_new</code> (<code>Synth.new</code>). To be able to
+communicate SynthDefs, SuperCollider defines a binary file format for the
+client to write and the server to read. The SynthDef file format is designed to
+be very compact: a typical SynthDef may be less than a kilobyte.</p>
+<p>SynthDefs can define parameters for the Synths they instantiate and plug them
+into UGens like other signals. However, these parameters can only modulate
+inputs to UGens — they can't add new UGens, take them away, or rewire the graph
+dynamically. It's a bummer sometimes, but it's the price we pay for efficient
+and stable modular audio software. Parameters may be directly modulated by the
+client using commands such as <code>/n_set</code> (<code>Synth:set</code>).</p>
+<p>Synths also talk to the outside world using special UGens — the big ones are
+<code>In</code> and <code>Out</code>, which allow reading from and writing from buses. A bus in SC is
+a signal, uniquely identified by a global index, which any Synth can write to
+or read from. Buses that correspond to hardware inputs and outputs are the most
+important.</p>
+<p>Once again, we have a class vs. instance distinction between SynthDefs and
+Synths. This particular class vs. instance distinction is very musically
+important, because it enables efficient polyphony by spawning multiple sound
+events from a template. Furthermore, as part of scsynth's aim of real-time
+safety, spawning and freeing Synths is a very efficient process. You can easily
+fire off hundreds of Synths per second for something like granular synthesis.</p>
+<h3 id="layer-4-synth-order-and-groups"><a class="header" href="#layer-4-synth-order-and-groups">Layer 4: Synth order and Groups</a></h3>
+<p>As soon as your arrangement of Synths gets complex with multiple Synths writing
+to the same buses, order becomes very important. For example, if you have
+instrument Synths and a separate Synth for an effect, the effect needs to
+process its audio <em>after</em> the instrument. <code>/s_new</code> has a parameter which allows
+you to insert the Synth relative to another.</p>
+<p>An entirely linear approach to Synth order gets a little bit flimsy the more
+complex the order is. Groups offer a solution for robust, hierarchical Synth
+order, and the hierarchy formed is known as the "server tree," and the Synths
+and Groups within as "nodes."</p>
+<p>supernova has a special feature known as a "parallel group" (<code>ParGroup</code>) where
+you <em>don't</em> care about order, and instead giving supernova a chance to split
+the Synths' workload across different threads. Since many musical applications
+involve separate, superimposed sound events that don't interact with each other
+(multiple tracks, polyphony), this can result in tremendous CPU improvements
+when used properly.</p>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<p>SuperCollider built unlike pretty much any other audio software out there, but
+a lot of its quirky designs are well justified for its goals as an efficient
+and flexible sound synthesis platform. The language and server are built from
+the ground up for real-time safety, and the <code>SynthDef</code>/<code>Synth</code> distinction
+allows for arbitrary polyphony with low overhead.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="sclang-quick-reference.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="sclang-quick-reference.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

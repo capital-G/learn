@@ -1,0 +1,529 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Write a Melody - SuperCollider by Example</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="ch00-introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="ch01-00-getting-started.html"><strong aria-hidden="true">2.</strong> Chapter 1 - Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch01-01-installation.html"><strong aria-hidden="true">2.1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="ch01-02-ide.html"><strong aria-hidden="true">2.2.</strong> Getting to Know the IDE</a></li><li class="chapter-item expanded "><a href="ch01-03-make-sound.html"><strong aria-hidden="true">2.3.</strong> Make a Sound!</a></li><li class="chapter-item expanded "><a href="ch01-04-calc.html"><strong aria-hidden="true">2.4.</strong> Make a Calculator</a></li></ol></li><li class="chapter-item expanded "><a href="ch02-00-simple-tunes.html"><strong aria-hidden="true">3.</strong> Chapter 2 - Simple Songs</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch02-01-melody.html" class="active"><strong aria-hidden="true">3.1.</strong> Write a Melody</a></li><li class="chapter-item expanded "><a href="ch02-02-artic.html"><strong aria-hidden="true">3.2.</strong> Syncopation & Articulation</a></li><li class="chapter-item expanded "><a href="ch02-03-chords.html"><strong aria-hidden="true">3.3.</strong> Add a Chord Progression - intro to arrays</a></li></ol></li><li class="chapter-item expanded "><a href="interlude-01-simple-song.html"><strong aria-hidden="true">4.</strong> Interlude - A simple arrangement</a></li><li class="chapter-item expanded "><a href="ch03-00-simple-synth.html"><strong aria-hidden="true">5.</strong> Chapter 3 - Simple Synthesizers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch03-01-subtract-synth.html"><strong aria-hidden="true">5.1.</strong> A Basic Subtractive Synth</a></li><li class="chapter-item expanded "><a href="ch03-02-lfo-synth.html"><strong aria-hidden="true">5.2.</strong> Some modulation</a></li><li class="chapter-item expanded "><a href="ch03-03-additive.html"><strong aria-hidden="true">5.3.</strong> Basic Additive Synthesis - emphasize arrays here</a></li><li class="chapter-item expanded "><a href="ch03-04-am-synth.html"><strong aria-hidden="true">5.4.</strong> Basic AM Synthesis</a></li><li class="chapter-item expanded "><a href="ch03-05-fm-synth.html"><strong aria-hidden="true">5.5.</strong> Basic FM Synthesis</a></li><li class="chapter-item expanded "><a href="ch03-06-control-parameters.html"><strong aria-hidden="true">5.6.</strong> Controlling Custom Synth Parameters</a></li><li class="chapter-item expanded "><a href="ch03-07-poly-synths.html"><strong aria-hidden="true">5.7.</strong> Poly Synths</a></li><li class="chapter-item expanded "><a href="ch03-08-mono-synths.html"><strong aria-hidden="true">5.8.</strong> Mono Synths</a></li><li class="chapter-item expanded "><a href="ch03-09-stereo.html"><strong aria-hidden="true">5.9.</strong> Stereo and Panning</a></li></ol></li><li class="chapter-item expanded "><a href="interlude-02-303.html"><strong aria-hidden="true">6.</strong> Interlude - 303 Basslines for the Masses</a></li><li class="chapter-item expanded "><a href="ch04-00-basic-effects.html"><strong aria-hidden="true">7.</strong> Chapter 4 - Basic Effects</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch04-01-compression.html"><strong aria-hidden="true">7.1.</strong> Compression and Limiting</a></li><li class="chapter-item expanded "><a href="ch04-02-delay.html"><strong aria-hidden="true">7.2.</strong> Delays</a></li><li class="chapter-item expanded "><a href="ch04-03-comb.html"><strong aria-hidden="true">7.3.</strong> Comb Filters</a></li><li class="chapter-item expanded "><a href="ch04-04-reverb.html"><strong aria-hidden="true">7.4.</strong> Reverb</a></li><li class="chapter-item expanded "><a href="ch04-05-sample-hold.html"><strong aria-hidden="true">7.5.</strong> Sample And Hold</a></li><li class="chapter-item expanded "><a href="ch04-06-modulation.html"><strong aria-hidden="true">7.6.</strong> Creative Modulation</a></li></ol></li><li class="chapter-item expanded "><a href="interlude-03-drum.html"><strong aria-hidden="true">8.</strong> Interlude - Drum Synthesis for Fun and Profit</a></li><li class="chapter-item expanded "><a href="interlude-04-dance.html"><strong aria-hidden="true">9.</strong> Interlude - Writing a dance track (TBD)</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">SuperCollider by Example</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <p>So let's start off by writing a very simple scale:</p>
+<pre><code>(
+Pbind(
+  \midinote, Pseq([60, 62, 64, 65, 67, 69, 71, 72]),
+  \dur, 1
+).play
+)
+</code></pre>
+<p>Now type ctrl-enter (Windows and Linux) or Cmd-Enter (Mac).</p>
+<p>[Put a picture of ctrl-enter and cmd-enter]</p>
+<p>In the post window in the bottom right you should also see the following, while in the background
+you will hear a simple C major scale.</p>
+<p>[TODO Screenshot]</p>
+<p>Whenever you successfully evaluate a piece of code in SuperCollider, this window will give you a
+little bit of feedback about what just happened. Don't worry yet about what that means.</p>
+<p>#Didn't Hear Anything?</p>
+<p>If you see something different then there was probably something wrong with what you just typed in.
+Check it again, paying careful attention to placement of brackets and commas. In particular
+SuperCollider requires brackets to be balanced. If all else fails, try copy and pasting the code
+from the book. If that doesn't fix it there may a deeper problem. Contact the mailing list, forum
+or Slack channel [links to follow].</p>
+<p>If you see the following, then you need to start the SuperCollider sound server:</p>
+<p>[TODO Screenshot]</p>
+<p>Finally, if you still don't hear anything then make sure that the volume is turned up sufficiently.
+I make this mistake more often than I'd like.</p>
+<h1 id="explaining-what-just-happened"><a class="header" href="#explaining-what-just-happened">Explaining What Just Happened</a></h1>
+<p>So we're going to take the piece of code that you just ran [terminology - this is sometimes also
+called 'evaluating'] and examine each piece of it so that you understand what happened. If you're a
+confident coder then you can probably skim this part.</p>
+<p>[Image with brackets colored]</p>
+<p>So the code we just ran is surround by brackets. Whenever we surround code by brackets in the
+SuperCollider IDE this is our way of telling the IDE that we want it to run all the code between
+the brackets. Note that whenever you have an open parenthesis - you must have a matching closing
+parenthesis. So what happens if we remove one of those parentheses:</p>
+<p>[Screenshots]</p>
+<p>We get the mysterious <code>parse error in interpreted text</code>, but also see that a little further
+down we see <code>unmatched ')' in interpreted text line 1 char 1</code>. So SuperCollider is telling us
+that it didn't understand the code ('parse error'), where it thinks the problem starts ('line 1'
+where the open paranthesis is) and what the problem is ('unmatched )' - that is we don't have a
+closing parenthesis to match the opening one). If you put the parenthesis back and run the code
+again you should now hear the scale played back.</p>
+<p>Now place the cursor (the blinking horizontal line that marks where new text will appear) after the
+final parenthesis. See how the entire block is colored yellow. Now remove the final parenthesis.
+The yellow highlight disappears. This is another way that you can tell if a code block can be run,
+and if you have missing parentheses.</p>
+<p>[IMAGE of BLOCK]</p>
+<p>Restore the code block to it's initial state (hint: you can use undo to do this: <code>ctrl-z</code> or
+<code>cmd-z</code>). When you reevaluate it it should play normally. Now let's look deeper. First of all what
+is <code>\dur</code>? This is short for duration, and tells SuperCollider that the code following the
+comma (<code>1</code>) should be used for the duration in beats of the next note.</p>
+<p><code>\midinote</code> is used to tell SuperCollider that the code that follows the comma: <code>Pseq([60, 62, 64, 65, 67, 69, 71, 72])</code> will generate 'midi notes'. MIDI notes are an industry standard
+where particular numbers (these are defined as part of the MIDI standard [wikipedia link]) are
+treated as musical notes. For example middle C is 60, D#/Cb is 61, D is 62, etc.</p>
+<p>[Image of the Midi notes].</p>
+<p>At this point hopefully you have guessed that <code>Pseq</code> is being used to define our scale:</p>
+<ul>
+<li><strong>60</strong> - C4</li>
+<li><strong>62</strong> - D4</li>
+<li><strong>64</strong> - E4</li>
+<li><strong>65</strong> - F4</li>
+<li><strong>67</strong> - G4</li>
+<li><strong>69</strong> - A4</li>
+<li><strong>71</strong> - B4</li>
+<li><strong>72</strong> - C5</li>
+</ul>
+<p>So this little bit of code has generated the following sequence of notes:</p>
+<ul>
+<li>C4 for a duration of 1 beat</li>
+<li>D4 for a duration of 1 beat</li>
+<li>D4 for a duration of 1 beat</li>
+<li>D4 for a duration of 1 beat</li>
+<li>E4 for a duration of 1 beat</li>
+<li>F4 for a duration of 1 beat</li>
+<li>G4 for a duration of 1 beat</li>
+<li>A4 for a duration of 1 beat</li>
+<li>B4 for a duration of 1 beat</li>
+<li>C5 for a duration of 1 beat</li>
+</ul>
+<p>[Image of a simple ascending scale here]</p>
+<p>Similarly the following piece of code will generate a descending C Major scale, where each note has a duration of 2 beats:</p>
+<pre><code>(
+Pbind(
+  \midinote, Pseq([72, 71, 69, 67, 65, 64, 62, 60]),
+  \dur, 2
+).play
+)
+</code></pre>
+<p>[Image of a simple descending scale here]</p>
+<p>If we want to vary the number of beats, then we use a Pseq for the <code>\dur</code> key:</p>
+<pre><code>(
+Pbind(
+  \midinote, Pseq([60, 62, 64, 65, 67, 69, 71, 72]),
+  \dur, Pseq([8, 4, 2, 1, 1/2, 1/4, 1/8, 1/16])
+).play
+)
+</code></pre>
+<p>[Image of what this is here]</p>
+<p>Note that when we want to create eighth notes, or sixteenth notes we write it as a fraction (e.g.
+1\8 for one eighth of a beat). We could also write these durations as decimal places if we liked -
+<code>0.5</code> and <code>1/2</code> are interchangable.</p>
+<p>So what happens with the following code:</p>
+<pre><code>(
+Pbind(
+  \midinote, Pseq([60, 62, 64, 65, 67, 69, 71, 72]),
+  \dur, Pseq([1, 2, 2])
+).play
+)
+</code></pre>
+<p>It plays C4 for 1 beat, D4 for 2 beats, E4 for 2 beats and then stops. So Pbind will keep playing
+until one of the sequences runs out of notes to play. If we provided it with infinitely long
+<code>\midinote</code> and <code>\dur</code> sequences then it would play for ever. One way that we can provide
+such an infinite sequence is by providing a single value. The following will play for as long as
+you let it (remember <code>Ctrl/Cmd-period</code> will stop the audio server):</p>
+<pre><code>(
+Pbind(
+  \midinote, 60,
+  \dur, 1
+).play
+)
+</code></pre>
+<p>So single values result in an infinite repeating sequence.</p>
+<p>So now we have enough to create a simple tune:</p>
+<p>[Twinkle Twinkle little star score]</p>
+<pre><code>// Twinkle Twinkle Little Star
+(
+Pbind(
+  \midinote, Pseq([60, 60, 67, 67, 69, 69, 67, 65, 65, 64, 64, 62, 62, 60,67, 67, 65, 65, 64, 64, 62,67, 67, 65, 65, 64, 64, 62,60, 60, 67, 67, 69, 69, 67, 65, 65, 64, 64, 62, 62, 60]),
+  \dur, Pseq([1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2,1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2,1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2,1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2]),
+).play
+)
+)
+</code></pre>
+<p>And hopefully after pasting this into your IDE, you should hear Twinkle Twinkle little star played
+at the very sedate pace of 60bpm. If you're thinking this is pretty verbose and annoying way to
+enter music, then let's fix that.</p>
+<p>First of all note in the score above that the rhythm is a repeating motif of 6 quarter notes,
+followed by a half note. So now we can change the above to:</p>
+<pre><code>// Twinkle Twinkle Little Star
+(
+Pbind(
+  \midinote, Pseq([60, 60, 67, 67, 69, 69, 67, 65, 65, 64, 64, 62, 62, 60,67, 67, 65, 65, 64, 64, 62,67, 67, 65, 65, 64, 64, 62,60, 60, 67, 67, 69, 69, 67, 65, 65, 64, 64, 62, 62, 60]),
+  \dur, Pseq([1, 1, 1, 1, 1, 1, 2], 6)
+).play
+)
+</code></pre>
+<p>So by passing in a second value to Pseq (separated from the array by a <code>,</code>) we were able to
+tell SuperCollider to play this sequence 6 times in a row. We can't repeat the <code>dur</code> trick, but
+fortunately we have options available to us:</p>
+<pre><code>(
+var a = [60, 60, 67, 67, 69, 69, 67, 65, 65, 64, 64, 62, 62, 60];
+var b = [67, 67, 65, 65, 64, 64, 62];
+
+Pbind(
+  \midinote, Pseq(a ++ b ++ b ++ a),
+  \dur, Pseq([1, 1, 1, 1, 1, 1, 2], 6),
+).play
+)
+</code></pre>
+<p>So what was that? The first two lines create two new <code>variables</code> called <code>a</code> and <code>b</code> respectively
+and assign arrays to those labels. [Definition of an array to go here]. Then in Pseq we concatenate
+those variables using <code>++</code> to create one large array:</p>
+<pre><code>(
+var a = [1,2,3];
+var b = [4,5,6];
+
+a.postln;
+b.postln;
+a ++ b;
+)
+</code></pre>
+<p>[TODO Previous chapter - explain parentheses]</p>
+<p>In the post window you should see:</p>
+<pre><code>[ 1, 2, 3 ]
+[ 4, 5, 6 ]
+-&gt; [ 1, 2, 3, 4, 5, 6 ]
+</code></pre>
+<p><code>a ++ b</code> creates a new array which combines <code>a</code> and <code>b</code>. So above we create a new sequence of
+note values that consisted of <code>a</code> followed by <code>b</code> twice followed by <code>a</code> again. There is another way
+to achieve this, and when working with <code>Pbind</code> this is generally preferred. We can use
+<code>Pseq</code> to chain several sequences together. So the above would be rewritten:</p>
+<pre><code>(
+var a = [60, 60, 67, 67, 69, 69, 67, 65, 65, 64, 64, 62, 62, 60];
+var b = [67, 67, 65, 65, 64, 64, 62];
+
+Pbind(
+  \midinote, Pseq([Pseq(a), Pseq(b, 2), Pseq(a)]),
+  \dur, Pseq([1, 1, 1, 1, 1, 1, 2], 6),
+).play
+)
+</code></pre>
+<p>Or if you prefer, you can use <code>++</code> to combine the patterns:</p>
+<pre><code>(
+var a = [60, 60, 67, 67, 69, 69, 67, 65, 65, 64, 64, 62, 62, 60];
+var b = [67, 67, 65, 65, 64, 64, 62];
+
+Pbind(
+  \midinote, Pseq(a) ++ Pseq(b, 2) ++ Pseq(a),
+  \dur, Pseq([1, 1, 1, 1, 1, 1, 2], 6),
+).play
+)
+</code></pre>
+<p>The last two pieces of code are interchangable - the way you write this comes down to personal
+preference (I personally prefer the latter). SuperCollider will convert the second piece of code
+into the the former for you.</p>
+<p>Okay, so this is definitely better, but you probably don't know all the midinote numbers. Can we do
+better? Yes we can:</p>
+<pre><code>(
+var a = Pseq([0, 0, 4, 4, 5, 5, 4, 3, 3, 2, 2, 1, 1, 0]);
+var b = Pseq([4, 4, 3, 3, 2, 2, 1]);
+
+Pbind(
+  \scale, Scale.major,
+  \root, 0,
+  \octave, 5,
+  \degree, a ++ b ++ b ++ a,
+  \dur, Pseq([1, 1, 1, 1, 1, 1, 2], 6),
+).play
+)
+</code></pre>
+<p>So this time the numbers in our array correspond to notes in the C scale in the middle octave on
+the piano (the octave that begins with middle C, or C4), with <code>0</code> for <code>C4</code>, <code>1</code>, for <code>D</code> all the
+way to <code>8</code> for <code>C5</code>. So let's explain the new keys in this <code>Pbind</code>:</p>
+<ul>
+<li><strong>scale</strong> - this Pbind uses the major scale. SuperCollider has pretty much any scale you can
+imagine. If you don't set this value then the default value is Scale.major.</li>
+<li><strong>root</strong> - The key for this scale. 0 is C, 1 is C#, etc. The default is <code>0</code>.</li>
+<li><strong>octave</strong> - The default octave. 5 is confusing used for the octave that starts with <code>C4</code>. If you
+don't set the octave key, then <code>5</code> is the default.</li>
+<li><strong>degree</strong> - The degree of the current scale, where 0 is the root note of the scale in the
+current octave. In the above example if wanted to play <code>C3</code> then we would use the value <code>-8</code>
+while C4 would be <code>8</code>. We can also play sharps and flats. C# would be 0.1 - while Db is 0.9. C##
+(also known as D) would be 0.2.</li>
+</ul>
+<p>So transposition is pretty easy. By key to G:</p>
+<pre><code>(
+var a = Pseq([0, 0, 4, 4, 5, 5, 4, 3, 3, 2, 2, 1, 1, 0]);
+var b = Pseq([4, 4, 3, 3, 2, 2, 1]);
+
+Pbind(
+  \scale, Scale.major,
+  \root, 7,
+  \octave, 5,
+  \degree, a ++ b ++ b ++ a,
+  \dur, Pseq([1, 1, 1, 1, 1, 1, 2], 6),
+).play
+)
+</code></pre>
+<p>So in the example above <code>0</code> means the value G4, as we're starting 7 intervals (or 7 notes in the
+chromatic scale) above C4. The bass point that we're using is up the keyboard from middle C.</p>
+<p>or to A minor (note that we went down to the A3 before C4):</p>
+<pre><code>(
+var a = Pseq([0, 0, 4, 4, 5, 5, 4, 3, 3, 2, 2, 1, 1, 0]);
+var b = Pseq([4, 4, 3, 3, 2, 2, 1]);
+
+Pbind(
+  \scale, Scale.minor,
+  \root, -3,
+  \octave, 4,
+  \degree, a ++ b ++ b ++ a,
+  \dur, Pseq([1, 1, 1, 1, 1, 1, 2], 6),
+).play
+)
+</code></pre>
+<p>We can even transpose it to a different mode, such as F Lydian, by using <code>mtranspose</code>:</p>
+<pre><code>(
+var a = Pseq([0, 0, 4, 4, 5, 5, 4, 3, 3, 2, 2, 1, 1, 0]);
+var b = Pseq([4, 4, 3, 3, 2, 2, 1]);
+
+Pbind(
+  \scale, Scale.major,
+  \root, 0,
+  \octave, 5,
+  \degree, a ++ b ++ b ++ a,
+  \dur, Pseq([1, 1, 1, 1, 1, 1, 2], 6),
+).play
+)
+</code></pre>
+<p>Note that in the above example the scale and root are very important. As <code>F Lydian</code> is built upon
+the 4th degree of the C major scale, then we need to pass in a major scale and a root of <code>0</code> so
+that we're using the C major scale. C lydian built upon <code>C4</code> would require a root of <code>F</code> and the
+octave value of <code>4</code> and would look like this:</p>
+<pre><code>(
+var a = Pseq([0, 0, 4, 4, 5, 5, 4, 3, 3, 2, 2, 1, 1, 0]);
+var b = Pseq([4, 4, 3, 3, 2, 2, 1]);
+
+Pbind(
+  \scale, Scale.major,
+  \root, 5,
+  \octave, 4,
+  \degree, a ++ b ++ b ++ a,
+  \dur, Pseq([1, 1, 1, 1, 1, 1, 2], 6),
+).play
+)
+</code></pre>
+<p>See if you can reassure yourself that this is correct, and if you're interested in modal music try
+playing around with some other values.</p>
+<p>If you don't understand what a mode is, don't worry about it. If you're interested, then this
+wikipedia article is a good place to start.</p>
+<p><strong>Important</strong> Everything written above assumes that you are working in equal temperment and using
+western scales. SuperCollider will happily support microtuning, Indian scales or anything else you
+can think of. Don't worry this will be explained in later chapters. For now you must remain
+shackled within conventional western notions of musicality...</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch02-00-simple-tunes.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch02-02-artic.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch02-00-simple-tunes.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch02-02-artic.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
